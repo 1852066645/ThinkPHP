@@ -1,0 +1,1174 @@
+缓存：
+    sessionStorage.setItem('search_history',JSON.stringify(arr));//可缓存数组，对象（缓存时间：关闭窗口就清空）5M
+    localStorage.setItem('search_history',JSON.stringify(arr));//可缓存数组，对象（缓存时间：时间过长）5M
+
+
+删除缓存：
+
+    localStorage.removeItem('search_history'); 
+
+
+获取缓存数据：
+
+    JSON.parse(sessionStorage.getItem('search_history'));
+
+
+转义：
+
+   <k onclick="get_search(\''+ary['param']['query']+'\','+search_type+')">  	
+
+
+js字符切割组成数组：
+
+    str=''+ary["data"][key]["trade_cn"]+'';//切割对象
+    var strs= new Array(); //定义一数组
+    strs=str.split("|"); //字符分割
+    for (i=0;i<strs.length ;i++ )
+    {
+        html +=	'<li>'+strs[i]+'</li>';
+
+     }
+
+
+js复制
+
+<textarea cols="20" rows="10" id="biao1">李志豪你个大傻逼</textarea>
+<input type="button" onClick="copyUrl2()" value="点击复制代码" />
+</body>
+
+<script>
+
+     function copyUrl2()
+     {
+         var Url2=document.getElementById("biao1");
+         Url2.select(); // 选择对象
+         document.execCommand("Copy"); // 执行浏览器复制命令
+         alert("已复制好，可贴粘。");
+     }
+</script>
+
+
+
+/**
+ * 取汉字的第一个字的首字母
+ * @param type $str
+ * @return string|null
+ */
+ function _getFirstCharter($str){
+    if(empty($str)){return '';}
+    $fchar=ord($str{0});
+    if($fchar>=ord('A')&&$fchar<=ord('z')) return strtoupper($str{0});
+    $s1=iconv('UTF-8','gb2312',$str);
+    $s2=iconv('gb2312','UTF-8',$s1);
+    $s=$s2==$str?$s1:$str;
+    $asc=ord($s{0})*256+ord($s{1})-65536;
+    if($asc>=-20319&&$asc<=-20284) return 'A';
+    if($asc>=-20283&&$asc<=-19776) return 'B';
+    if($asc>=-19775&&$asc<=-19219) return 'C';
+    if($asc>=-19218&&$asc<=-18711) return 'D';
+    if($asc>=-18710&&$asc<=-18527) return 'E';
+    if($asc>=-18526&&$asc<=-18240) return 'F';
+    if($asc>=-18239&&$asc<=-17923) return 'G';
+    if($asc>=-17922&&$asc<=-17418) return 'H';
+    if($asc>=-17417&&$asc<=-16475) return 'J';
+    if($asc>=-16474&&$asc<=-16213) return 'K';
+    if($asc>=-16212&&$asc<=-15641) return 'L';
+    if($asc>=-15640&&$asc<=-15166) return 'M';
+    if($asc>=-15165&&$asc<=-14923) return 'N';
+    if($asc>=-14922&&$asc<=-14915) return 'O';
+    if($asc>=-14914&&$asc<=-14631) return 'P';
+    if($asc>=-14630&&$asc<=-14150) return 'Q';
+    if($asc>=-14149&&$asc<=-14091) return 'R';
+    if($asc>=-14090&&$asc<=-13319) return 'S';
+    if($asc>=-13318&&$asc<=-12839) return 'T';
+    if($asc>=-12838&&$asc<=-12557) return 'W';
+    if($asc>=-12556&&$asc<=-11848) return 'X';
+    if($asc>=-11847&&$asc<=-11056) return 'Y';
+    if($asc>=-11055&&$asc<=-10247) return 'Z';
+    return null;
+}
+
+
+
+/**
+ * 生成随机字符串
+ * @param $length  生成长度
+ * @param int $numeric  0 有英文 、 1 纯数字
+ * @return string
+ */
+function random($length, $numeric = 0) {
+	$seed = base_convert(md5(microtime().$_SERVER['DOCUMENT_ROOT']), 16, $numeric ? 10 : 35);
+	$seed = $numeric ? (str_replace('0', '', $seed).'012340567890') : ($seed.'zZ'.strtoupper($seed));
+	if ($numeric) {
+		$hash = '';
+	} else {
+		$hash = chr(rand(1, 26) + rand(0, 1) * 32 + 64);
+		$length--;
+	}
+	$max = strlen($seed) - 1;
+	for ($i = 0; $i < $length; $i++) {
+		$hash .= $seed{mt_rand(0, $max)};
+	}
+	return $hash;
+}
+
+
+
+/**
+ * 检测输入中是否含有不允许的特殊字符
+ *
+ * @param char $string 要检查的字符串名称
+ * @return TRUE or FALSE
+ */
+function is_badword($string) {
+	$badwords = array("\\",'&',' ',"'",'"','/','*',',','<','>',"\r","\t","\n","#");
+	foreach ($badwords as $value) {
+		if (strpos($string, $value) !== FALSE) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * 检查用户名是否符合规定（ 3-20位英文数字组成）
+ *
+ * @param STRING $username 要检查的用户名
+ * @return 	TRUE or FALSE
+ */
+function is_username($username) {
+	$strlen = strlen($username);
+	if (is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)) {
+		return false;
+	} elseif ( 20 < $strlen || $strlen < 3 ) {
+		return false;
+	}
+	return true;
+}
+
+/**
+ * 邮箱合法校验
+ * @param string $email 待验证邮箱
+ * @return boolean 合法返回True,否则返回false
+ */
+function is_email($email){
+	if (!$email || !is_string($email)) {
+		return false;
+	}
+	$preg = '/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([_a-z0-9]+\.)+[a-z]{2,5}$/';
+	return preg_match($preg,$email)?true:false;
+}
+
+/**
+ * 手机号码校验
+ * @param string $mobile 待验证手机号码
+ * @return boolean 合法返回True,否则返回false
+ */
+function is_mobile($mobile){
+	if(!$mobile || !is_numeric($mobile)){
+		return false;
+	}
+	$preg = '/^((\(\d{2,3}\))|(\d{3}\-))?1[3|4|5|7|8]\d{9}$/';
+	return preg_match($preg,$mobile)?true:false;
+}
+
+
+/**
+ * URL合法校验(常见域名)
+ * @param string $url 待验证URL
+ * @return boolean 合法返回True,否则返回false
+ */
+function is_url($url){
+	if(!$url || !is_string($url)){
+		return false;
+	}
+	$preg = '/^(http[s]?:)?(\/{2})?([a-z0-9]+\.)?([a-z0-9]+\.)?([a-z0-9]+\.)?([a-z0-9]+\.)?[a-z0-9]+(\-?[a-z0-9]+)*(\.(com|cn|me|info|co|so|net\.cn|org\.cn|biz|name|tv|asia|tel|mobi|cc|hk|xin|io|org|net|com\.cn))+(.*)$/i'; // 可允许4级
+	return preg_match($preg,$url)?true:false;
+}
+
+
+
+/**
+ * 调试性输出字符或数组
+ * @param mix $data 打印输出的内容
+ * @param int  $type 0-echo输出字符串，print_r输出数组，否则使用var_dump打印字符串/数组
+ * @param bool $pre true格式化输出
+ * @param bool $break true输出内容后exit中断程序
+ */
+function p($data,$type=0,$pre=true,$break=true){
+
+	if(is_string($data) || is_int($data)){
+
+		if($type == 0){
+			echo $data;
+		}else{
+			var_dump($data);
+		}
+
+	}else if(is_array($data)){
+
+		if($pre){
+			echo '<pre>';
+			if($type == 0){
+				print_r($data);
+			}else{
+				var_dump($data);
+			}
+			echo '</pre>';
+		}else{
+			if($type == 0){
+				print_r($data);
+			}else{
+				var_dump($data);
+			}
+		}
+
+	}else{
+		if($pre){
+			echo '<pre>';
+			if($type == 0){
+				print_r($data);
+			}else{
+				var_dump($data);
+			}
+			echo '</pre>';
+		}else{
+			if($type == 0){
+				print_r($data);
+			}else{
+				var_dump($data);
+			}
+		}
+	}
+
+	if($break){
+		exit();
+	}
+}
+
+
+
+js异步提交文件
+<input style="display: block;" class="input_pos" type="file" id="file" name="stu_info"/>
+var formData = new FormData();
+		formData.append("stu_info", document.getElementById("file").files[0]);
+		$.ajax({
+			url: "<{:U('SchoolAdmin/Student/impUser')}>",
+			type: "POST",
+			data: formData,
+			/**
+			 *必须false才会自动加上正确的Content-Type
+			 */
+			contentType: false,
+			/**
+			 * 必须false才会避开jQuery对 formdata 的默认处理
+			 * XMLHttpRequest会对 formdata 进行正确的处理
+			 */
+			processData: false,
+			success: function (r) {
+				layer.closeAll('loading');
+				if (r.status == 1) {
+					$(".mobile-layer-shade").fadeOut();
+					layer.msg(r.info,{icon: 2, time: 2000, shade: [0.7,'#000']},function(){
+						$(".batch-add").fadeIn();
+					});
+				} else {
+					var num = 1;
+					var time = setInterval(function(){
+						$('.icon_only').css({'width':num+'%','background':'#1A92ED'}).html(num+'%');
+						num++;
+						if(num >= 100){
+							clearInterval(time);
+						}
+					},10);
+					layer.msg(r.info,{icon: 1, time: 2000, shade: [0.7,'#000']},function(){
+					$('.icon_only').css({'width':100+'%','background':'#1A92ED'}).html(100+'%');
+						window.location.href = r.url;
+
+					});
+				}
+
+			},
+			error: function () {
+				alert("上传失败！");
+			}
+		});
+
+
+
+
+/**
+ * 时间转化函数
+ *
+ * @param $now
+ * @param $datetemp
+ * @param $dstr
+ * @return string
+ */
+function smart_date($datetemp, $dstr = 'Y-m-d H:i') {
+	$timezone = C('timezone');
+	$sec = time() - $datetemp;
+	$hover = floor($sec / 3600);
+	if ($hover == 0) {
+		$min = floor($sec / 60);
+		if ($min == 0) {
+			$op = $sec . ' 秒前';
+		} else {
+			$op = "$min 分钟前";
+		}
+	} elseif ($hover < 24) {
+		$op = "约 {$hover} 小时前";
+	} else {
+		$op = gmdate($dstr, $datetemp + $timezone * 3600);
+	}
+	return $op;
+}
+
+
+
+
+
+
+/**
+ * 检查并获取 来源设备
+ * @return init	设备ID
+ */
+function checkDevice()
+{
+    /*
+    DEVICE
+        PC		: 1
+        WAP		: 2
+        ANDROID	: 3
+        IOS		: 4
+        WECHAT	: 5
+     */
+    $device = 1;	// PC - Default
+    if (strpos($_SERVER["HTTP_USER_AGENT"],"MicroMessenger")) {
+        $device = 5;
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+        $device = 4;
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Android')||$_SERVER['HTTP_USER_AGENT']=='Android') {
+        $device = 3;
+    }
+    return $device;
+}
+
+
+
+/**
+ * 百度地图
+ */
+
+<div id="allmap"></div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Mza68koxBCeTCaz6YFiotNAIx1OgUdsp"></script>
+
+//百度地图API功能
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(116.331398,39.897445),20);
+    map.enableScrollWheelZoom(true);
+    map.enableDragging();
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+  //用经纬度设置地图中心点
+    map.addControl(top_left_control);
+    map.addControl(top_left_navigation);
+    if(map_x != "" && map_y != ""){
+            map.clearOverlays();
+            var new_point = new BMap.Point(map_x,map_y); //map_x经度    map_y维度
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);
+        }
+
+
+
+
+/jquery分页/
+#####js代码开始#####
+//分页插件
+/**
+2014-08-05 ch
+**/
+(function($){
+	var ms = {
+		init:function(obj,args){
+			return (function(){
+				ms.fillHtml(obj,args);
+				ms.bindEvent(obj,args);
+			})();
+		},
+		//填充html
+		fillHtml:function(obj,args){
+			return (function(){
+				obj.empty();
+				//上一页
+				if(args.current > 1){
+					obj.append('<a href="javascript:;" class="prevPage">上一页</a>');
+				}else{
+					obj.remove('.prevPage');
+					obj.append('<span class="disabled">上一页</span>');
+				}
+				//中间页码
+				if(args.current != 1 && args.current >= 4 && args.pageCount != 4){
+					obj.append('<a href="javascript:;" class="tcdNumber">'+1+'</a>');
+				}
+				if(args.current-2 > 2 && args.current <= args.pageCount && args.pageCount > 5){
+					obj.append('<span>...</span>');
+				}
+				var start = args.current -2,end = args.current+2;
+				if((start > 1 && args.current < 4)||args.current == 1){
+					end++;
+				}
+				if(args.current > args.pageCount-4 && args.current >= args.pageCount){
+					start--;
+				}
+				for (;start <= end; start++) {
+					if(start <= args.pageCount && start >= 1){
+						if(start != args.current){
+							obj.append('<a href="javascript:;" class="tcdNumber">'+ start +'</a>');
+						}else{
+							obj.append('<span class="current">'+ start +'</span>');
+						}
+					}
+				}
+				if(args.current + 2 < args.pageCount - 1 && args.current >= 1 && args.pageCount > 5){
+					obj.append('<span>...</span>');
+				}
+				if(args.current != args.pageCount && args.current < args.pageCount -2  && args.pageCount != 4){
+					obj.append('<a href="javascript:;" class="tcdNumber">'+args.pageCount+'</a>');
+				}
+				//下一页
+				if(args.current < args.pageCount){
+					obj.append('<a href="javascript:;" class="nextPage">下一页</a>');
+				}else{
+					obj.remove('.nextPage');
+					obj.append('<span class="disabled">下一页</span>');
+				}
+			})();
+		},
+		//绑定事件
+		bindEvent:function(obj,args){
+			return (function(){
+				obj.on("click","a.tcdNumber",function(){
+					var current = parseInt($(this).text());
+					ms.fillHtml(obj,{"current":current,"pageCount":args.pageCount});
+					if(typeof(args.backFn)=="function"){
+						args.backFn(current);
+					}
+				});
+				//上一页
+				obj.on("click","a.prevPage",function(){
+					var current = parseInt(obj.children("span.current").text());
+					ms.fillHtml(obj,{"current":current-1,"pageCount":args.pageCount});
+					if(typeof(args.backFn)=="function"){
+						args.backFn(current-1);
+					}
+				});
+				//下一页
+				obj.on("click","a.nextPage",function(){
+					var current = parseInt(obj.children("span.current").text());
+					ms.fillHtml(obj,{"current":current+1,"pageCount":args.pageCount});
+					if(typeof(args.backFn)=="function"){
+						args.backFn(current+1);
+					}
+				});
+			})();
+		}
+	}
+	$.fn.createPage = function(options){
+		var args = $.extend({
+			pageCount : 10,
+			current : 1,
+			backFn : function(){}
+		},options);
+		ms.init(this,args);
+	}
+})(jQuery);
+####js结束#####
+
+<div class="type-page-box"></div>
+样式
+/*分页样式代码*/
+.type-page-box{text-align: center;color: #ccc; width: 100%; }
+.type-page-box a{display: inline-block;color: #000000;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 5px;border-radius: 4px;vertical-align: middle;}
+.type-page-box a:hover{text-decoration: none;border: 1px solid #39ac69;}
+.type-page-box span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 5px;color: #fff;background-color: #39ac69;	border: 1px solid #39ac69;border-radius: 4px;vertical-align: middle;}
+.type-page-box span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 5px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+
+代码例子：
+function loadList() {
+    $('.address-loading').css('display', 'block');
+    $('.table-bordered .address-list').not('.address-loading,.address-add').remove();
+    $.ajax({
+        url:      '/index.php/Api/Address/getAddressList',
+        type:     'POST',
+        dataType: 'json',
+        data:     {
+            'member_id': window._attr.memberId,
+            'token':     window._attr.token,
+            'needtab':   1,
+            'page':      window._attr.page,
+            'epage':     window._attr.rows
+        },
+        success:  function(result, textStatus, jqXHR){
+            if (result.code != 1) {
+                layer.msg(result.msg);
+            } else {
+                $('.address-loading').css('display', 'none');
+                 console.log(result);
+
+                if (result.data.address_list.length > 0 && !$.trim($('.type-page-box').html())) {
+                    // console.log('pageCount: %d',result.data.pageCount);
+                    $('.type-page-box').unbind();
+                    $('.type-page-box').createPage({
+                        pageCount: Math.ceil(result.data.total / (result.data.rows || window._attr.rows)),
+                        current:   window._attr.page,
+                        backFn:    function(p) {
+                            // console.log('createPage.backFn: %d', p);
+                            window._attr.page = p;
+                            loadList();
+                        }
+                    });
+                }
+
+                var tpl = $('#address-list-tpl').children();
+                for (var i = 0; i < result.data.address_list.length; i++) {
+                     //console.log(result.data.address_list[i]);
+                    var addressInfo = tpl.clone();
+                    addressInfo.attr('data-address-id', result.data.address_list[i].address_id);
+                    addressInfo.find('.address-name').text(result.data.address_list[i].true_name);
+                    addressInfo.find('.address-phone').text(result.data.address_list[i].mob_phone);
+                    addressInfo.find('.address-province').text(window._attr.areaNameList[result.data.address_list[i].province_id] || '--');
+                    addressInfo.find('.address-city').text(window._attr.areaNameList[result.data.address_list[i].city_id]);
+                    addressInfo.find('.address-area').text(window._attr.areaNameList[result.data.address_list[i].area_id]);
+                    addressInfo.find('.address-detail').text(result.data.address_list[i].address);
+                    addressInfo.find('.address-btn-edit').attr('href', '/index.php?s=Home/User/editAddress&address_id=' + result.data.address_list[i].address_id);
+                    if (result.data.address_list[i].is_default == 1) {
+                        addressInfo.addClass('default');
+                    }
+                    $('.address-add').before(addressInfo);
+                }
+            }
+        }
+    });
+}
+
+
+时间切割："2017-02-28 10:00:00"
+arr[i]['ci_invitation_time'].split(" ")[0].split("-");
+
+
+
+
+
+打印word文件
+例子：
+//打印简历
+    public function downresume()
+    {
+        //根据学生id获取简历内容
+        $student_id=$_REQUEST['student_id'];
+        $post_data = array(
+            'method' => 'resume.get',
+            'type' => 'detail',
+            'student_id'=>$student_id,
+            'company_id'=>$_COOKIE['pc_company_id'],
+            'token'=>$_COOKIE['pc_company_token']
+        );
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $result=$this->send_post($http_type.$_SERVER['SERVER_NAME'].'/index.php/Mobile/Api/getPostData', $post_data);
+        $result_array=json_decode($result,true);
+        //错误提示
+        if($result_array['code']!=0){
+            exit($result_array['msg']);
+        }else{
+            //填充简历模板数据
+            $html=$this->resume_tpl($result_array);
+        }
+        //===========导出简历(start)==================
+        $filename=$result_array['data']['student_realname'].'个人简历';
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: no-cache");
+        $wordStr = '<html xmlns:o="urn:schemas-microsoft-com:office:office"
+        xmlns:w="urn:schemas-microsoft-com:office:word"
+        xmlns="">
+        <head>
+        <STYLE>
+        BR.page { page-break-after: always }
+        </STYLE>
+        </head><body>';
+        $wordStr .= $html;
+        $wordStr .= '</body></html>';
+        //防止导出乱码
+        $file = iconv("utf-8", "GBK", $filename);
+
+        header("Content-Type: application/doc");
+        header("Content-Disposition: attachment; filename=" . $file . ".doc");
+        echo $wordStr;
+        //===========导出简历(end)==================
+    }
+    /**
+     * 发送post请求
+     * @param string $url 请求地址
+     * @param array $post_data post键值对数据
+     * @return string
+     */
+    function send_post($url, $post_data) {
+
+        $postdata = http_build_query($post_data);
+        $options = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => 'Content-type:application/x-www-form-urlencoded',
+                'content' => $postdata,
+                'timeout' => 15 * 60 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        return $result;
+    }
+    /**
+     * 简历模板（填充数据）
+     * $array 简历接口返回的数据结构（数组）
+     */
+    function resume_tpl($array){
+        //基本信息
+        $student_avatar=$array['data']['student_avatar'];//头像
+        $intention_nature_cn=$array['data']['intention_nature_cn'];//求职状态
+        $realname=$array['data']['student_realname'];//姓名
+        $gender=($array['data']['student_gender']==1)?'男':'女';//性别
+        $age=$array['data']['age'];//年龄
+        $student_work_exp=$array['data']['student_work_exp'].'年工作经验';//工作经验
+        $student_mobile=$array['data']['student_mobile'];//手机号
+        $student_email=$array['data']['student_email'];//邮箱
+        //求职意向
+        $intention_nature_cn=$array['data']['intention']['intention_nature_cn'];//工作性质
+        $intention_city_cn=$array['data']['intention']['intention_city_cn'];//工作地点
+        $intention_job_cn=$array['data']['intention']['intention_job_cn'];//意向职位
+        $intention_trade_cn=$array['data']['intention']['intention_trade_cn'];//意向行业
+        $intention_wage_cn=$array['data']['intention']['intention_wage_cn'];//期望薪资
+        //工作经历（html）
+        $work_html='';
+        foreach($array['data']['work'] as $key=>$value){
+            $work_html.='<div class="commonCircleBox">
+						<b class="circle"></b>
+						<h5 class="rc_time">
+							'.$array['data']['work'][$key]['work_starttime'].' ~ '.$array['data']['work'][$key]['work_endtime'].'
+						</h5>
+						<dl>
+							<dt><span>'.$array['data']['work'][$key]['work_company'].'</span>&nbsp;&nbsp;<span>'.$array['data']['work'][$key]['work_post'].'</span></dt>
+							<dd>'.$array['data']['work'][$key]['work_describe'].'</dd>
+						</dl>
+					</div>';
+        }
+        //教育背景
+        $edu_html='';
+        foreach($array['data']['education'] as $key=>$value){
+            $edu_html.='<div class="commonCircleBox">
+						<b class="circle"></b>
+						<h5 class="rc_time">
+							'.$array['data']['education'][$key]['edu_starttime'].' ~ '.$array['data']['education'][$key]['edu_endtime'].'
+						</h5>
+						<dl>
+							<dt>'.$array['data']['education'][$key]['school'].'</dt>
+							<dd>'.$array['data']['education'][$key]['education_cn'].'</dd>
+						</dl>
+
+					</div>';
+        }
+        //项目经验
+        $item_html='';
+        foreach($array['data']['project'] as $key=>$value){
+            $item_html.='<div class="commonCircleBox">
+                <b class="circle"></b>
+                <h5 class="rc_time">
+                    '.$array['data']['project'][$key]['project_starttime'].' ~ '.$array['data']['project'][$key]['project_endtime'].'
+                </h5>
+                <dl>
+                    <dt>
+                        <span>'.$array['data']['project'][$key]['project_name'].'</span>
+                        <span></span>
+                    </dt>
+                    <dd>'.$array['data']['project'][$key]['project_describe'].'</dd>
+                </dl>
+            </div>';
+        }
+        //专业技能
+        $skill_html='';
+        foreach($array['data']['skill'] as $key=>$value){
+            $skill_html.='<div class="commonCircleBox">
+						<b class="circle"></b>
+                        <dl>
+							<dt>
+								'.$array['data']['skill'][$key]['skill_name'].'
+							</dt>
+							<dd>'.$array['data']['skill'][$key]['skill_level_cn'].'</dd>
+						</dl>
+
+					</div>';
+        }
+        //自我描述
+        $description=$array['data']['description'];
+
+        $html='<div id="seeResume" class="commonAlertBox">
+			<a href="javascript:void(0)" title="关闭窗口" class="icon-Close2"></a>
+			<div class="resumeHeader">
+				<div class="resume_picBox">
+					<img class="resume_pic" src="res/uploads/talent_pic.jpg" />
+				</div>
+				<div class="resume_baseInfo">
+					<div class="baseInfo_row">
+						<h2 class="resume_name" style="text-align: center;">'.$realname.'（个人简历）</h2>
+                    </div>
+                    <div class="baseInfo_row">
+                       <div class="rc_title">
+                            <i class="icon-JobIntention"></i>
+                            <h3>基本信息</h3>
+				        </div>
+                        <span>'.$gender.'</span>&nbsp;&nbsp;
+						<span>'.$age.'岁</span>&nbsp;&nbsp;
+						<span>'.$student_work_exp.'</span>
+					</div>
+					<div class="baseInfo_row">
+						<div class="baseInfo_tel">
+							<i class="icon-ContactPhone">手机：</i>
+							<p>'.$student_mobile.'</p>
+						</div>
+						<div class="baseInfo_email">
+							<i class="icon-EmailAddress">邮箱：</i>
+							<p>'.$student_email.'</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="resumeCell jobIntention">
+				<div class="rc_title">
+					<i class="icon-JobIntention"></i>
+					<h3>求职意向</h3>
+				</div>
+				<div class="rc_con">
+					<dl>
+						<dt>工作性质</dt>
+						<dd>'.$intention_nature_cn.'</dd>
+					</dl>
+					<dl>
+						<dt>工作地点</dt>
+						<dd>'.$intention_city_cn.'</dd>
+					</dl>
+					<dl>
+						<dt>意向职位</dt>
+						<dd>'.$intention_job_cn.'</dd>
+					</dl>
+					<dl>
+						<dt>意向行业</dt>
+						<dd>'.$intention_trade_cn.'</dd>
+					</dl>
+					<dl>
+						<dt>期望薪资</dt>
+						<dd>'.$intention_wage_cn.'</dd>
+					</dl>
+				</div>
+			</div>
+			<div class="resumeCell">
+				<div class="rc_title">
+					<i class="icon-WorkExperience1"></i>
+					<h3>工作经历</h3>
+				</div>
+				<div class="rc_con">
+					'.$work_html.'
+				</div>
+			</div>
+			<div class="resumeCell">
+				<div class="rc_title">
+					<i class="icon-EducationExperience"></i>
+					<h3>教育背景</h3>
+				</div>
+				<div class="rc_con">
+					'.$edu_html.'
+				</div>
+			</div>
+			<div class="resumeCell">
+				<div class="rc_title">
+					<i class="icon-ExperienceProject"></i>
+					<h3>项目经验</h3>
+				</div>
+				<div class="rc_con">
+					'.$item_html.'
+				</div>
+			</div>
+			<div class="resumeCell">
+				<div class="rc_title">
+					<i class="icon-ProfessionSalkills"></i>
+					<h3>专业技能</h3>
+				</div>
+				<div class="rc_con">
+					'.$skill_html.'
+				</div>
+			</div>
+			<div class="resumeCell">
+				<div class="rc_title">
+					<i class="icon-SelfDescription"></i>
+					<h3>自我描述</h3>
+				</div>
+				<div class="rc_con">
+					<div class="commonCircleBox">
+						<b class="circle"></b>
+                        <dl>
+                            <dd>'.$description.'</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>';
+        return $html;
+
+    }
+
+
+5天自动收货
+// 收货时间倒数add:时间戳
+function count_get(add){
+    var timestamp2 = new Date(Date.parse(add.replace(/-/g,"/"))).getTime();
+    var timestamp = Date.parse(new Date())
+        var m = Math.round ((timestamp2+432000000 - timestamp) / 1000);
+        var days = parseInt (m / 24 / 3600);
+        var hours = parseInt ((m % (3600 * 24)) / 3600);
+        if((timestamp2+432000000)>timestamp){
+            $('.order_state_time').html(days+'天'+hours+'小时后自动确认');
+            if(days==0 && hours==0){
+                clearInterval(Auto1);
+                $('.order_state_time').html('已收货');
+                $('.order_state_info').html('已收货');
+                $('#btn2').hide();
+            }
+        }else{
+            clearInterval(Auto1);
+            $('.order_state_time').html('已收货');
+            $('.order_state_info').html('已收货');
+            $('#btn2').hide();
+        }
+}
+
+css实现loading效果
+效果1：
+<!DOCTYPE html>
+<html>
+<head>
+    <title>loading</title>
+    <style type="text/css">
+        .loadingTip {
+            position: fixed;
+            top:50%;
+            left: 50%;
+            -webkit-transform:translate3d(-50%,-50%,0);
+            z-index: 10001;
+        }
+        .loadingTip div {
+            background-color: #000;
+            width: 15px;
+            height: 15px;
+            border-radius: 100%;
+            margin: 2px;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            position: absolute;
+        }
+        @-webkit-keyframes loading {
+            50% {
+                opacity: 0.3;
+                -webkit-transform: scale(0.4);
+                transform: scale(0.4);
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+        .loadingTip > div:nth-child(1) {
+            top: 25px;
+            left: 0;
+            -webkit-animation: loading 1s 0s infinite linear;
+            animation: loading 1s 0s infinite linear;
+        }
+        .loadingTip > div:nth-child(2) {
+            top: 17.04545px;
+            left: 17.04545px;
+            -webkit-animation: loading 1s 0.12s infinite linear;
+            animation: loading 1s 0.12s infinite linear;
+        }
+        .loadingTip > div:nth-child(3) {
+            top: 0;
+            left: 25px;
+            -webkit-animation: loading 1s 0.24s infinite linear;
+            animation: loading 1s 0.24s infinite linear;
+        }
+        .loadingTip > div:nth-child(4) {
+            top: -17.04545px;
+            left: 17.04545px;
+            -webkit-animation: loading 1s 0.36s infinite linear;
+            animation: loading 1s 0.36s infinite linear;
+        }
+        .loadingTip > div:nth-child(5) {
+            top: -25px;
+            left: 0;
+            -webkit-animation: loading 1s 0.48s infinite linear;
+            animation: loading 1s 0.48s infinite linear;
+        }
+        .loadingTip > div:nth-child(6) {
+            top: -17.04545px;
+            left: -17.04545px;
+            -webkit-animation: loading 1s 0.6s infinite linear;
+            animation: loading 1s 0.6s infinite linear;
+        }
+        .loadingTip > div:nth-child(7) {
+            top: 0;
+            left: -25px;
+            -webkit-animation: loading 1s 0.72s infinite linear;
+            animation: loading 1s 0.72s infinite linear;
+        }
+        .loadingTip > div:nth-child(8) {
+            top: 17.04545px;
+            left: -17.04545px;
+            -webkit-animation: loading 1s 0.84s infinite linear;
+            animation: loading 1s 0.84s infinite linear;
+        }
+
+    </style>
+</head>
+<body>
+<div class="loadingTip">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+</body>
+</html>
+
+
+
+
+
+效果2：
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>loading</title>
+    <style type="text/css">
+        .loading {
+            position: fixed;
+            top:50%;
+            left: 50%;
+            -webkit-transform:translate3d(-50%,-50%,0);
+            z-index: 10001;
+        }
+        .loading > div {
+            background-color: #0091ff;
+            width: 15px;
+            height: 15px;
+            border-radius: 100%;
+            margin: 2px;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            display: inline-block;
+        }
+        .loading > div:nth-child(1) {
+            -webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+        }
+        .loading > div:nth-child(2) {
+            -webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+        }
+        .loading > div:nth-child(3) {
+            -webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+        }
+        @-webkit-keyframes scale {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1;
+            }
+            45% {
+                -webkit-transform: scale(0.1);
+                transform: scale(0.1);
+                opacity: 0.7;
+            }
+            80% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="loading">
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+</body>
+</html>
+
+
+实现刮刮乐：
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+
+        canvas{
+            border: 1px solid #000;
+            display: block;
+            margin: 0 auto;
+            background-size: 300px 200px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="300" height="200"></canvas>
+</body>
+
+<script>
+
+    var canvas = document.getElementById( 'canvas' ),
+        ctx = canvas.getContext( '2d' );
+
+    var w = canvas.width,
+        h = canvas.height;
+
+    /*随机生成奖品*/
+    var awards = [ '美女一只', 'sorry 很遗憾。再接再厉', '抓住一只单身狗', '滚去敲代码', 'sorry 很遗憾。再接再厉', '美女一只', '抓住一只单身狗', '滚去敲代码', '抓住一只单身狗', 'sorry 很遗憾。再接再厉',
+        '抓住一只单身狗' ];
+
+    /*随机生成一个索引*/
+    var award=awards[Math.floor(Math.random()*awards.length)];
+
+    /*将奖品信息绘制在canvas*/
+    ctx.font='bold 32px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(award,w/2,h/2);
+
+    /*然后将奖品信息装换成canvas的背景图 1为最高质量*/
+    var dataurl=canvas.toDataURL('image/png',1);
+    canvas.style.background='url('+dataurl+')';
+    ctx.clearRect(0,0,w,h);
+
+    /*定义canvas蒙版*/
+    ctx.fillStyle='#ddd';
+    ctx.fillRect(0,0,w,h);
+
+
+    var flag=false;
+    /*鼠标按下事件*/
+    canvas.addEventListener('mousedown',function(){
+        flag=true;
+        /*涂抹去蒙版*/
+        ctx.globalCompositeOperation='destination-out';
+    })
+
+    /*鼠标移动事件*/
+    canvas.addEventListener('mousemove',function(e){
+        if(flag){
+            var x= e.clientX-canvas.offsetLeft;
+            var y= e.clientY-canvas.offsetTop;
+            ctx.beginPath();
+            ctx.fillRect(x,y,30,30);
+            ctx.fill();
+        }
+    })
+
+    /*鼠标提起事件*/
+    canvas.addEventListener('mouseup',function(){
+        flag=false;
+        ctx.globalCompositeOperation='source-over';
+    })
+</script>
+</html>
+
+ajax跨域那点事：
+http://www.qdfuns.com/notes/44187/71b6f2b5c40ba6f4420ea29e76b9927b.html
+
+
+简单的导出phpexecl
+public function phpexecl(){
+        $innerdata = M('member')
+            ->field('member_id,member_mobile,member_nickname,member_sex')
+            ->select();
+        $table = '';
+        $table .= "<table>
+    <thead>
+        <tr>
+            <th class='name'>用户名称</th>
+            <th class='name'>用户手机号</th>
+            <th class='name'>用户邮箱</th>
+            <th class='name'>注册时间</th>
+        </tr>
+    </thead>
+    <tbody>";
+        foreach ($innerdata as $v) {
+            $table .= "<tr>
+            <td class='name'>{$v['member_id']}</td>
+            <td class='name'>{$v['member_mobile']}</td>
+            <td class='name'>{$v['member_nickname']}</td>
+            <td class='name'>{$v['member_sex']}</td>
+        </tr>";
+        }
+        $table .= "</tbody></table>";
+        //通过header头控制输出excel表格
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");;
+        header('Content-Disposition:attachment;filename="测试.xls"');
+        header("Content-Transfer-Encoding:binary");
+        echo $table;
+    }
+
+模拟Curl  post请求
+$uri = "http://www.cnblogs.com/test.php";//这里换成自己的服务器的地址
+// 参数数组
+$data = array (
+ 'name' => 'tanteng'
+// 'password' => 'password'
+);
+$ch = curl_init ();
+// print_r($ch);
+curl_setopt ( $ch, CURLOPT_URL, $uri );
+curl_setopt ( $ch, CURLOPT_POST, 1 );
+curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+$return = curl_exec ( $ch );
+curl_close ( $ch );
+print_r($return);
+
+另外一种模拟请求：
+$url = 'https://www.kuaidi100.com/query?type='.$list['e_code'].'&postid='.$list['shipping_code'];
+            $postdata = http_build_query();
+            $options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => 'Content-type:application/x-www-form-urlencoded',
+                    'content' => $postdata,
+                    'timeout' => 15 * 60 // 超时时间（单位:s）
+                )
+            );
+            $context = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);

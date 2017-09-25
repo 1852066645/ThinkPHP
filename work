@@ -1172,3 +1172,24 @@ $url = 'https://www.kuaidi100.com/query?type='.$list['e_code'].'&postid='.$list[
             );
             $context = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
+
+
+<!--微信授权登陆-->
+<script>
+window.WECHAT_APPID = '<{:C('wxpay.appid')}>';
+window._url = window._url || {};
+window._url.byWechat    =  '<{:C('WEBSITE_URL')}>'+'<{:U('Mobile/Login/byWechat')}>';
+$(function(){
+	mui(".mui-scroll-wrapper").scroll({bounce: false});
+
+	$('#btn-login-wechat').on('tap', function(event) {
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize'
+			+ '?appid=' + window.WECHAT_APPID
+			+ '&redirect_uri=' + window._url.byWechat
+			+ '&response_type=code'
+			+ '&scope=snsapi_base'
+			+ '&state=STATE'
+			+ '#wechat_redirect';
+	});
+});
+</script>

@@ -28,10 +28,12 @@ js字符切割组成数组：
         html +=	'<li>'+strs[i]+'</li>';
 
      }
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
-js复制
-
+==========================
+js复制：（开始）
+==========================
 <textarea cols="20" rows="10" id="biao1">李志豪你个大傻逼</textarea>
 <input type="button" onClick="copyUrl2()" value="点击复制代码" />
 </body>
@@ -47,10 +49,17 @@ js复制
      }
 </script>
 
+==========================
+js复制：（结束）
+==========================
 
 
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+取汉字的第一个字的首字母：（开始）
+==========================
 /**
- * 取汉字的第一个字的首字母
  * @param type $str
  * @return string|null
  */
@@ -87,9 +96,16 @@ js复制
     if($asc>=-11055&&$asc<=-10247) return 'Z';
     return null;
 }
+==========================
+取汉字的第一个字的首字母：（结束）
+==========================
+
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
-
+==========================
+生成随机字符串：（开始）
+==========================
 /**
  * 生成随机字符串
  * @param $length  生成长度
@@ -112,8 +128,17 @@ function random($length, $numeric = 0) {
 	return $hash;
 }
 
+==========================
+生成随机字符串：（结束）
+==========================
 
 
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+检测输入中是否含有不允许的特殊字符：（开始）
+==========================
 /**
  * 检测输入中是否含有不允许的特殊字符
  *
@@ -130,6 +155,15 @@ function is_badword($string) {
 	return FALSE;
 }
 
+==========================
+检测输入中是否含有不允许的特殊字符：（结束）
+==========================
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+检查用户名是否符合规定：（开始）
+==========================
 /**
  * 检查用户名是否符合规定（ 3-20位英文数字组成）
  *
@@ -146,6 +180,18 @@ function is_username($username) {
 	return true;
 }
 
+==========================
+检查用户名是否符合规定：（结束）
+==========================
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+邮箱合法校验：（开始）
+==========================
+
 /**
  * 邮箱合法校验
  * @param string $email 待验证邮箱
@@ -158,6 +204,17 @@ function is_email($email){
 	$preg = '/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([_a-z0-9]+\.)+[a-z]{2,5}$/';
 	return preg_match($preg,$email)?true:false;
 }
+
+==========================
+邮箱合法校验：（结束）
+==========================
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+手机号码校验：（开始）
+==========================
 
 /**
  * 手机号码校验
@@ -172,12 +229,20 @@ function is_mobile($mobile){
 	return preg_match($preg,$mobile)?true:false;
 }
 
+==========================
+手机号码校验：（结束）
+==========================
 
-/**
- * URL合法校验(常见域名)
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+URL合法校验(常见域名)：（开始）
+==========================
  * @param string $url 待验证URL
  * @return boolean 合法返回True,否则返回false
- */
+
 function is_url($url){
 	if(!$url || !is_string($url)){
 		return false;
@@ -187,9 +252,18 @@ function is_url($url){
 }
 
 
+==========================
+URL合法校验(常见域名)：（结束）
+==========================
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+调试性输出字符或数组：（开始）
+==========================
 
 /**
- * 调试性输出字符或数组
+ * 
  * @param mix $data 打印输出的内容
  * @param int  $type 0-echo输出字符串，print_r输出数组，否则使用var_dump打印字符串/数组
  * @param bool $pre true格式化输出
@@ -247,8 +321,18 @@ function p($data,$type=0,$pre=true,$break=true){
 }
 
 
+==========================
+调试性输出字符或数组：（结束）
+==========================
 
-js异步提交文件
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+js异步提交文件：（开始）
+==========================
+
 <input style="display: block;" class="input_pos" type="file" id="file" name="stu_info"/>
 var formData = new FormData();
 		formData.append("stu_info", document.getElementById("file").files[0]);
@@ -295,44 +379,20 @@ var formData = new FormData();
 		});
 
 
-
-
-/**
- * 时间转化函数
- *
- * @param $now
- * @param $datetemp
- * @param $dstr
- * @return string
- */
-function smart_date($datetemp, $dstr = 'Y-m-d H:i') {
-	$timezone = C('timezone');
-	$sec = time() - $datetemp;
-	$hover = floor($sec / 3600);
-	if ($hover == 0) {
-		$min = floor($sec / 60);
-		if ($min == 0) {
-			$op = $sec . ' 秒前';
-		} else {
-			$op = "$min 分钟前";
-		}
-	} elseif ($hover < 24) {
-		$op = "约 {$hover} 小时前";
-	} else {
-		$op = gmdate($dstr, $datetemp + $timezone * 3600);
-	}
-	return $op;
-}
+==========================
+js异步提交文件：（结束）
+==========================
 
 
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
-/**
- * 检查并获取 来源设备
- * @return init	设备ID
- */
+
+==========================
+检查并获取 来源设备：（开始）
+==========================
 function checkDevice()
 {
     /*
@@ -354,11 +414,15 @@ function checkDevice()
     return $device;
 }
 
+==========================
+检查并获取 来源设备：（结束）
+==========================
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
-/**
- * 百度地图
- */
+==========================
+百度地图：（开始）
+==========================
 
 <div id="allmap"></div>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Mza68koxBCeTCaz6YFiotNAIx1OgUdsp"></script>
@@ -381,188 +445,29 @@ function checkDevice()
             map.panTo(new_point);
         }
 
+==========================
+百度地图：（结束）
+==========================
 
 
-
-/jquery分页/
-#####js代码开始#####
-//分页插件
-/**
-2014-08-05 ch
-**/
-(function($){
-	var ms = {
-		init:function(obj,args){
-			return (function(){
-				ms.fillHtml(obj,args);
-				ms.bindEvent(obj,args);
-			})();
-		},
-		//填充html
-		fillHtml:function(obj,args){
-			return (function(){
-				obj.empty();
-				//上一页
-				if(args.current > 1){
-					obj.append('<a href="javascript:;" class="prevPage">上一页</a>');
-				}else{
-					obj.remove('.prevPage');
-					obj.append('<span class="disabled">上一页</span>');
-				}
-				//中间页码
-				if(args.current != 1 && args.current >= 4 && args.pageCount != 4){
-					obj.append('<a href="javascript:;" class="tcdNumber">'+1+'</a>');
-				}
-				if(args.current-2 > 2 && args.current <= args.pageCount && args.pageCount > 5){
-					obj.append('<span>...</span>');
-				}
-				var start = args.current -2,end = args.current+2;
-				if((start > 1 && args.current < 4)||args.current == 1){
-					end++;
-				}
-				if(args.current > args.pageCount-4 && args.current >= args.pageCount){
-					start--;
-				}
-				for (;start <= end; start++) {
-					if(start <= args.pageCount && start >= 1){
-						if(start != args.current){
-							obj.append('<a href="javascript:;" class="tcdNumber">'+ start +'</a>');
-						}else{
-							obj.append('<span class="current">'+ start +'</span>');
-						}
-					}
-				}
-				if(args.current + 2 < args.pageCount - 1 && args.current >= 1 && args.pageCount > 5){
-					obj.append('<span>...</span>');
-				}
-				if(args.current != args.pageCount && args.current < args.pageCount -2  && args.pageCount != 4){
-					obj.append('<a href="javascript:;" class="tcdNumber">'+args.pageCount+'</a>');
-				}
-				//下一页
-				if(args.current < args.pageCount){
-					obj.append('<a href="javascript:;" class="nextPage">下一页</a>');
-				}else{
-					obj.remove('.nextPage');
-					obj.append('<span class="disabled">下一页</span>');
-				}
-			})();
-		},
-		//绑定事件
-		bindEvent:function(obj,args){
-			return (function(){
-				obj.on("click","a.tcdNumber",function(){
-					var current = parseInt($(this).text());
-					ms.fillHtml(obj,{"current":current,"pageCount":args.pageCount});
-					if(typeof(args.backFn)=="function"){
-						args.backFn(current);
-					}
-				});
-				//上一页
-				obj.on("click","a.prevPage",function(){
-					var current = parseInt(obj.children("span.current").text());
-					ms.fillHtml(obj,{"current":current-1,"pageCount":args.pageCount});
-					if(typeof(args.backFn)=="function"){
-						args.backFn(current-1);
-					}
-				});
-				//下一页
-				obj.on("click","a.nextPage",function(){
-					var current = parseInt(obj.children("span.current").text());
-					ms.fillHtml(obj,{"current":current+1,"pageCount":args.pageCount});
-					if(typeof(args.backFn)=="function"){
-						args.backFn(current+1);
-					}
-				});
-			})();
-		}
-	}
-	$.fn.createPage = function(options){
-		var args = $.extend({
-			pageCount : 10,
-			current : 1,
-			backFn : function(){}
-		},options);
-		ms.init(this,args);
-	}
-})(jQuery);
-####js结束#####
-
-<div class="type-page-box"></div>
-样式
-/*分页样式代码*/
-.type-page-box{text-align: center;color: #ccc; width: 100%; }
-.type-page-box a{display: inline-block;color: #000000;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 5px;border-radius: 4px;vertical-align: middle;}
-.type-page-box a:hover{text-decoration: none;border: 1px solid #39ac69;}
-.type-page-box span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 5px;color: #fff;background-color: #39ac69;	border: 1px solid #39ac69;border-radius: 4px;vertical-align: middle;}
-.type-page-box span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 5px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
-
-代码例子：
-function loadList() {
-    $('.address-loading').css('display', 'block');
-    $('.table-bordered .address-list').not('.address-loading,.address-add').remove();
-    $.ajax({
-        url:      '/index.php/Api/Address/getAddressList',
-        type:     'POST',
-        dataType: 'json',
-        data:     {
-            'member_id': window._attr.memberId,
-            'token':     window._attr.token,
-            'needtab':   1,
-            'page':      window._attr.page,
-            'epage':     window._attr.rows
-        },
-        success:  function(result, textStatus, jqXHR){
-            if (result.code != 1) {
-                layer.msg(result.msg);
-            } else {
-                $('.address-loading').css('display', 'none');
-                 console.log(result);
-
-                if (result.data.address_list.length > 0 && !$.trim($('.type-page-box').html())) {
-                    // console.log('pageCount: %d',result.data.pageCount);
-                    $('.type-page-box').unbind();
-                    $('.type-page-box').createPage({
-                        pageCount: Math.ceil(result.data.total / (result.data.rows || window._attr.rows)),
-                        current:   window._attr.page,
-                        backFn:    function(p) {
-                            // console.log('createPage.backFn: %d', p);
-                            window._attr.page = p;
-                            loadList();
-                        }
-                    });
-                }
-
-                var tpl = $('#address-list-tpl').children();
-                for (var i = 0; i < result.data.address_list.length; i++) {
-                     //console.log(result.data.address_list[i]);
-                    var addressInfo = tpl.clone();
-                    addressInfo.attr('data-address-id', result.data.address_list[i].address_id);
-                    addressInfo.find('.address-name').text(result.data.address_list[i].true_name);
-                    addressInfo.find('.address-phone').text(result.data.address_list[i].mob_phone);
-                    addressInfo.find('.address-province').text(window._attr.areaNameList[result.data.address_list[i].province_id] || '--');
-                    addressInfo.find('.address-city').text(window._attr.areaNameList[result.data.address_list[i].city_id]);
-                    addressInfo.find('.address-area').text(window._attr.areaNameList[result.data.address_list[i].area_id]);
-                    addressInfo.find('.address-detail').text(result.data.address_list[i].address);
-                    addressInfo.find('.address-btn-edit').attr('href', '/index.php?s=Home/User/editAddress&address_id=' + result.data.address_list[i].address_id);
-                    if (result.data.address_list[i].is_default == 1) {
-                        addressInfo.addClass('default');
-                    }
-                    $('.address-add').before(addressInfo);
-                }
-            }
-        }
-    });
-}
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
-时间切割："2017-02-28 10:00:00"
+==========================
+时间切割："2017-02-28 10:00:00"：（开始）
+==========================
+
 arr[i]['ci_invitation_time'].split(" ")[0].split("-");
 
+==========================
+时间切割："2017-02-28 10:00:00":（结束）
+==========================
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-打印word文件
+==========================
+打印word文件:（开始）
+==========================
 例子：
 //打印简历
     public function downresume()
@@ -825,9 +730,16 @@ arr[i]['ci_invitation_time'].split(" ")[0].split("-");
         return $html;
 
     }
+==========================
+打印word文件:（结束）
+==========================    
+    
+  -------------------------------------------------------------------------------------------------------------------------------------  
+    
 
-
-5天自动收货
+==========================
+5天自动收货:（开始）
+==========================
 // 收货时间倒数add:时间戳
 function count_get(add){
     var timestamp2 = new Date(Date.parse(add.replace(/-/g,"/"))).getTime();
@@ -851,7 +763,16 @@ function count_get(add){
         }
 }
 
-css实现loading效果
+==========================
+5天自动收货:（结束）
+==========================
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+css实现loading效果:（开始）
+==========================
 效果1：
 <!DOCTYPE html>
 <html>
@@ -1019,9 +940,15 @@ css实现loading效果
 </div>
 </body>
 </html>
+==========================
+css实现loading效果:(结束)
+==========================
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
-实现刮刮乐：
+==========================
+实现刮刮乐：（开始）
+==========================
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -1098,12 +1025,25 @@ css实现loading效果
     })
 </script>
 </html>
+==========================
+实现刮刮乐：（结束）
+==========================
 
-ajax跨域那点事：
+----------------------------------------------------------------------------------------------------------------------------------------
+
+==========================
+ajax跨域那点事：（开始）
+==========================
 http://www.qdfuns.com/notes/44187/71b6f2b5c40ba6f4420ea29e76b9927b.html
+==========================
+ajax跨域那点事：（结束）
+==========================
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
-简单的导出phpexecl
+==========================
+简单的导出phpexecl（开始）
+==========================
 public function phpexecl(){
         $innerdata = M('member')
             ->field('member_id,member_mobile,member_nickname,member_sex')
@@ -1140,8 +1080,18 @@ public function phpexecl(){
         header("Content-Transfer-Encoding:binary");
         echo $table;
     }
+    
+==========================
+简单的导出phpexecl（结束）
+========================== 
+    
 
-模拟Curl  post请求
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+模拟Curl  post请求（开始）
+==========================
 $uri = "http://www.cnblogs.com/test.php";//这里换成自己的服务器的地址
 // 参数数组
 $data = array (
@@ -1172,9 +1122,17 @@ $url = 'https://www.kuaidi100.com/query?type='.$list['e_code'].'&postid='.$list[
             );
             $context = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
+==========================
+模拟Curl  post请求（结束）
+==========================
 
 
-<p style="color:red">微信授权登陆</p>
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+==========================
+微信授权登陆 (开始)
+==========================
 <script>
 window.WECHAT_APPID = '<{:C('wxpay.appid')}>';
 window._url = window._url || {};
@@ -1193,3 +1151,6 @@ $(function(){
 	});
 });
 </script>
+==========================
+微信授权登陆 (结束)
+==========================

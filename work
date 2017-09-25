@@ -1174,7 +1174,7 @@ $url = 'https://www.kuaidi100.com/query?type='.$list['e_code'].'&postid='.$list[
             $result = file_get_contents($url, false, $context);
 
 
-<!--微信授权登陆-->
+<p style="color:red">微信授权登陆</p>
 <script>
 window.WECHAT_APPID = '<{:C('wxpay.appid')}>';
 window._url = window._url || {};
